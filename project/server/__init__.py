@@ -3,6 +3,7 @@ import sys
 
 if os.environ.get('FLASK_COVERAGE'):
     import coverage
+
     COV = coverage.coverage(
         branch=True,
         include='project/*',
@@ -32,18 +33,25 @@ bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
 from project.server.models import User
+
 migrate = Migrate(app, db)
+
 
 @app.route("/")
 def root_site():
     return "<p>It works!</p>"
 
+
 from project.server.auth.views import auth_blueprint
+from project.server.users.views import users_blueprint
+
 app.register_blueprint(auth_blueprint)
+app.register_blueprint(users_blueprint)
+
 
 @app.cli.command()
 @click.option('--coverage/--no-coverage', default=False,
-                help='Run tests under code coverage.')
+              help='Run tests under code coverage.')
 def test(coverage):
     """Run the unit tests."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):
