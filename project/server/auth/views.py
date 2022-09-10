@@ -1,10 +1,12 @@
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from project.server import bcrypt, db
+from project.server import bcrypt, db, app
 from project.server.models import User
+import jwt
 
 auth_blueprint = Blueprint('auth', __name__)
+
 
 class RegisterAPI(MethodView):
     """
@@ -20,7 +22,8 @@ class RegisterAPI(MethodView):
 
     def post(self):
         # get the post data
-        post_data = request.get_json(); print(request)
+        post_data = request.get_json()
+        print(post_data)
         # check if user already exists
         user = User.query.filter_by(email=post_data.get('email')).first()
         if not user:
@@ -38,7 +41,7 @@ class RegisterAPI(MethodView):
                 responseObject = {
                     'status': 'success',
                     'message': 'Successfully registered.',
-                    'auth_token': auth_token.decode()
+                    'auth_token': jwt.decode(auth_token, app.config.get('SECRET_KEY'), algorithms=['HS256'])
                 }
                 return make_response(jsonify(responseObject)), 201
             except Exception as e:
