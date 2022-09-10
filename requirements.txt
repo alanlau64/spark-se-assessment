@@ -21,7 +21,7 @@ Mako==1.1.6
 MarkupSafe==1.1.1
 Paste==3.5.0
 ply==3.11
-# psycopg2==2.8.6
+psycopg2==2.8.6
 pycparser==2.20
 pycrypto==2.6.1
 PyJWT==2.1.0
