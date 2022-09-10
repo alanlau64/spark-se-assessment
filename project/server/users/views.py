@@ -9,10 +9,10 @@ users_blueprint = Blueprint('users', __name__)
 
 class GetUserList(MethodView):
     def get(self):
-        ret = []
+        ret = {"users": []}
         userList = User.query.all()
         for user in userList:
-            ret.append({'ID': user.id, 'Email': user.email})
+            ret['users'].append({'ID': user.id, 'Email': user.email, 'Register Time': user.registered_on, 'Admin': user.admin})
         return make_response(jsonify(ret)), 201
 
 
